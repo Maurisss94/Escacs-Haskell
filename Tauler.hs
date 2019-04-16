@@ -1,14 +1,12 @@
-module Tauler(
-    Peca (..)
-    ) where 
+import Peca
 
 import Data.List
 
 type Posicio = String
 type Parell = [(Peca, Posicio)]
 
-data Tauler = Tauler Parell
+data Tauler = Tauler Parell deriving (Show)
 
 
-iniciaTauler :: (Eq a) => [a] -> [a] -> [a]
-iniciaTauler a b = [ x++y | x<-a, y<-b ]
+--generarPosicions :: Tauler -> [String] -> [String]
+--generarPosicions a b = [ x++y | x<-a, y<-b ]

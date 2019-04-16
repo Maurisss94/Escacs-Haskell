@@ -1,3 +1,8 @@
+module Peca(
+    TipusPeca(..)
+    , ColorPeca(..)
+    , Peca(Peca)
+) where
 --Import de llibreries adicionals
 import qualified Data.Char as C
 
