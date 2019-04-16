@@ -22,11 +22,11 @@ taulerInicial = intercalate "\n" ["tcadract",
 
 llegirTauler :: String -> Tauler
 llegirTauler [] = Tauler []
-llegirTauler (x:cadenaTauler) = Tauler [(llegirPeca (obtenirCaracter cadenaTauler), "a1")]
+llegirTauler (x:xs) = Tauler (crearPair xs)
 
-crearPair :: String -> Maybe (Peca, Posicio)
-crearPair [] = Nothing
-crearPair (x:xs) = Just (llegirPeca (obtenirCaracter xs), "a")
+crearPair :: String -> [(Peca, Posicio)]
+crearPair "" = []
+crearPair (x:xs) =  [(llegirPeca x, "a")] ++ crearPair lines xs
 
 obtenirCaracter :: String -> Char
 obtenirCaracter [] = '\n'
