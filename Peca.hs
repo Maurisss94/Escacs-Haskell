@@ -1,14 +1,15 @@
 module Peca(
     TipusPeca(..)
     , ColorPeca(..)
-    , Peca(Peca)
+    , Peca(..)
+    , llegirPeca
 ) where
 --Import de llibreries adicionals
 import qualified Data.Char as C
 
 --Definició de tipus
 data TipusPeca = Peo | Cavall | Alfil | Torre | Dama | Rei deriving (Read)
-data ColorPeca = Blanc | Negre deriving (Show, Read)
+data ColorPeca = Blanc | Negre | NoColor deriving (Show, Read)
 data Peca = Peca { tipus::TipusPeca, color::ColorPeca }
 
 --Instanciació de la classe de tipus "Show" per al tipus "TipusPeca"
