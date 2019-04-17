@@ -3,13 +3,15 @@ import Peca
 import Data.List
 
 type Posicio = String
-type LlistaParell = [(Peca, Posicio)]
+type LlistaParell = [(Maybe Peca, Posicio)]
 
 data Tauler = Tauler LlistaParell deriving (Show)
 
+obtenirLlistaTauler :: Tauler -> LlistaParell
+obtenirLlistaTauler (Tauler t) = t
 
---generarPosicions :: Tauler -> [String] -> [String]
---generarPosicions a b = [ x++y | x<-a, y<-b ]
+generarPosicions :: [String] -> [String] -> [String]
+generarPosicions a b = [ x++y | y<-b, x<-a ]
 
 taulerInicial :: String
 taulerInicial = intercalate "\n" ["tcadract", 
@@ -17,22 +19,24 @@ taulerInicial = intercalate "\n" ["tcadract",
                                   "........",
                                   "........",
                                   "........",
+                                  "........",
                                   "PPPPPPPP",
                                   "TCADRACT"] ++ "\n"
 
-llegirTauler :: String -> Tauler
-llegirTauler [] = Tauler []
-llegirTauler (x:xs) = Tauler (crearPair xs)
+-- Mirar de simplificar les crides de generarPosicions, fer les llistes mes petites del estil [a..h], [8..1]
+crearTauler :: String -> Tauler
+crearTauler [] = Tauler []
+crearTauler xs = Tauler (crearLlistaParells taulerInicial (generarPosicions ["a","b","c","d","e","f","g","h"] ["8","7","6","5","4","3","2","1"]))
 
-crearPair :: String -> [(Peca, Posicio)]
-crearPair "" = []
-crearPair (x:xs) =  [(llegirPeca x, "a")] ++ crearPair lines xs
+crearLlistaParells :: String -> [String] -> LlistaParell
+crearLlistaParells "" []  = []
+crearLlistaParells (x:xs) y | x == '\n' = crearLlistaParells xs y
+crearLlistaParells (x:xs) (y:ys) | x == '.' = [(Nothing, y)]  ++  crearLlistaParells xs ys
+crearLlistaParells (x:xs) (y:ys) =  [(Just (llegirPeca x), y)] ++ crearLlistaParells xs ys
 
-obtenirCaracter :: String -> Char
-obtenirCaracter [] = '\n'
-obtenirCaracter (x:xs) = x
+obtenirValorCasella :: Posicio -> Tauler -> Maybe Peca
+obtenirValorCasella p t = buscarPeca p (obtenirLlistaTauler t)
 
 
-remFirst :: String -> String
-remFirst "" = ""
-remFirst cs = tail cs
+buscarPeca :: Posicio -> LlistaParell -> Maybe Peca
+buscarPeca p ll =  fst . head $ filter ((( == ) p) . snd ) ll
