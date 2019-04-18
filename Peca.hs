@@ -10,7 +10,7 @@ import qualified Data.Char as C
 --Definició de tipus
 data TipusPeca = Peo | Cavall | Alfil | Torre | Dama | Rei deriving (Read)
 data ColorPeca = Blanc | Negre | NoColor deriving (Show, Read)
-data Peca = Peca { tipus::TipusPeca, color::ColorPeca }
+data Peca = Buida | Peca { tipus::TipusPeca, color::ColorPeca }
 
 --Instanciació de la classe de tipus "Show" per al tipus "TipusPeca"
 instance Show TipusPeca where
@@ -35,6 +35,7 @@ instance Show Peca where
     show Peca {tipus=Dama, color=Negre} = "d"
     show Peca {tipus=Rei, color=Blanc} = "R"
     show Peca {tipus=Rei, color=Negre} = "r"
+    show Buida = "."   
 
 --Mètode per llegir una peça
 llegirPeca :: Char -> Peca
