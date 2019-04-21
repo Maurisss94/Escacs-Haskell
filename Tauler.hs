@@ -1,5 +1,9 @@
-import Peca
+module Tauler(
+    Tauler(..),
+    crearTauler
+) where 
 
+import Peca
 import Data.List
 
 type Posicio = (Int, Int)
