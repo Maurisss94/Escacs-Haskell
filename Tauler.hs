@@ -1,5 +1,9 @@
 import Peca
 import Posicio
+module Tauler(
+    Tauler(..),
+    crearTauler
+) where 
 
 import Data.List
 
