@@ -3,7 +3,11 @@ module Peca(
     TipusPeca(..),
     ColorPeca(..),
     llegirPeca,
-    movimentsPeo
+    movimentsPeo,
+    movimentsAlfil,
+    movimentsTorre,
+    movimentsDama,
+    movimentsRei
 ) where
 
 

@@ -1,10 +1,10 @@
-import Peca
-import Posicio
 module Tauler(
     Tauler(..),
     crearTauler
 ) where 
 
+import Peca
+import Posicio
 import Data.List
 
 
