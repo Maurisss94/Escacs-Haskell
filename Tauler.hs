@@ -10,7 +10,28 @@ import Data.List
 
 type LlistaParell = [(Peca, Posicio)]
 
-data Tauler = Tauler LlistaParell deriving (Show)
+data Tauler = Tauler LlistaParell
+
+instance Show Tauler where
+    show (Tauler t) = "   " ++ replicate 10 '=' ++ "\n" ++
+                      "8- |" ++ imprimirFila 8 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "7- |" ++ imprimirFila 7 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "6- |" ++ imprimirFila 6 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "5- |" ++ imprimirFila 5 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "4- |" ++ imprimirFila 4 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "3- |" ++ imprimirFila 3 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "2- |" ++ imprimirFila 2 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "1- |" ++ imprimirFila 1 t (reverse [1 .. 8]) ++ "|" ++ "\n" ++
+                      "   " ++ replicate 10 '=' ++ "\n" ++ "    abcdefgh \n" 
+
+
+                    
+imprimirFila :: Int -> LlistaParell -> [Int] -> String
+imprimirFila n xs (i:is) | length is == 0 = show (iBuscarPeca (n, i) xs)
+imprimirFila n xs (i:is) = imprimirFila n xs is ++ show (iBuscarPeca (n, i) xs)                      
+
+
+
 
 
 obtenirLlistaTauler :: Tauler -> LlistaParell
