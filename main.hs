@@ -1,13 +1,20 @@
 import System.IO
+import Control.Monad
 import Partida
+import Jugada
+
+-- data Torn = Blanques | Negres deriving (Eq)
 
 main = do
     --putStrLn "Indica el nom del fitxer: "
     --nomFitxer <- getLine
+    let partida = (Partida crearTauler True)
     llegirContingutFitxer "./tests/pastor.txt" ReadMode (\handle -> do
         contents <- hGetContents handle
         let jugades = lines contents
-        print (iniciJoc jugades))
+        forM_ jugades $ \jugada -> do
+            print (Jugada jugada))
+    
 
 
 llegirContingutFitxer :: FilePath -> IOMode -> (Handle -> IO a) -> IO a
@@ -20,11 +27,3 @@ llegirContingutFitxer path mode f = do
 mostraLinia :: [String] -> String
 mostraLinia [] = ""
 mostraLinia (x:xs) = ((x ++ "\n") ++ mostraLinia xs )
-
-crearPartida :: String -> Int -> Partida
-crearPartida jugada n = (Partida crearTauler True (Jugada (n+1) jugada))
-
-iniciJoc :: [String] -> Partida
-iniciJoc [] = error "partida buida" 
-iniciJoc [x] = crearPartida x (length x)
-iniciJoc (x:xs) = iniciJoc(xs)

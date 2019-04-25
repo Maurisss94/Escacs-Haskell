@@ -1,7 +1,6 @@
 module Partida (
     Partida(..),
     Tauler(..),
-    Jugada(..),
     crearTauler
 ) where
 
@@ -9,15 +8,14 @@ import Tauler
 import Jugada
 
 type Torn = Bool
-data Partida = Partida Tauler Torn Jugada deriving (Show)
+data Partida = Partida Tauler Torn deriving (Show)
 
 tauler :: Partida -> Tauler
-tauler (Partida tauler _ _) = tauler
+tauler (Partida tauler _) = tauler
 
 torn :: Partida -> Torn
-torn (Partida _ torn _) = torn
+torn (Partida _ torn) = torn
 
-jugada :: Partida -> Jugada
-jugada (Partida _ _ jugada) = jugada
+--fesJugada :: Tauler -> Jugada -> Tauler
 
 -- Implementar metode guanyador, que donat una Partida et retorna, no se com, el torn del guanyador
