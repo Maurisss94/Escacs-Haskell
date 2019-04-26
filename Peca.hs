@@ -7,7 +7,8 @@ module Peca(
     movimentsAlfil,
     movimentsTorre,
     movimentsDama,
-    movimentsRei
+    movimentsRei,
+    movimentsCavall,
 ) where
 
 
@@ -20,6 +21,10 @@ import Posicio
 data TipusPeca = Peo | Cavall | Alfil | Torre | Dama | Rei deriving (Read)
 data ColorPeca = Blanc | Negre | NoColor deriving (Eq, Show, Read)
 data Peca = Peca { tipus::TipusPeca, color::ColorPeca } | Buida deriving (Eq)
+
+direccio :: ColorPeca -> Int
+direccio Negre = -1
+direccio Blanc = 1
 
 --Instanciació de la classe de tipus "Show" per al tipus "TipusPeca"
 instance Show TipusPeca where
@@ -54,7 +59,7 @@ instance Show Peca where
     show Peca {tipus=Dama, color=Negre} = "d"
     show Peca {tipus=Rei, color=Blanc} = "R"
     show Peca {tipus=Rei, color=Negre} = "r"
-    show Buida = "."   
+    show Buida = "."
 
 --Caldria instanciar "Read" per al tipus "Peca", per no haver d'utilitzar tota l'estona "llegirPeca"..
 --instance Read Peca where
@@ -77,12 +82,26 @@ llegirPeca 'r' = (Peca Rei Negre)
 llegirPeca _ = error "No existeix la peça llegida..."
 
 
-movimentsPeo :: Posicio -> [Posicio]
-movimentsPeo pos | (fst pos == 1) && (snd pos == 2) = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos + 1, snd pos + 1)]
-movimentsPeo pos | (fst pos == 8) && (snd pos == 2) = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos - 1, snd pos + 1)]
-movimentsPeo pos | (fst pos == 1) = [(x,y)|x <- [fst pos], y <- [snd pos + 1]] ++ [(fst pos + 1, snd pos + 1)]
-movimentsPeo pos | (fst pos == 8) = [(x,y)|x <- [fst pos], y <- [snd pos + 1]] ++ [(fst pos - 1, snd pos + 1)]
-movimentsPeo pos = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos - 1, snd pos + 1)] ++ [(fst pos + 1, snd pos + 1)]
+
+
+--movimentsPeo :: Posicio -> [Posicio]
+--movimentsPeo pos | (fst pos == 1) && (snd pos == 2) = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos + 1, snd pos + 1)]
+--movimentsPeo pos | (fst pos == 8) && (snd pos == 2) = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos - 1, snd pos + 1)]
+--movimentsPeo pos | (fst pos == 1) = [(x,y)|x <- [fst pos], y <- [snd pos + 1]] ++ [(fst pos + 1, snd pos + 1)]
+--movimentsPeo pos | (fst pos == 8) = [(x,y)|x <- [fst pos], y <- [snd pos + 1]] ++ [(fst pos - 1, snd pos + 1)]
+--movimentsPeo pos = [(x,y)|x <- [fst pos], y <- [snd pos + 1, snd pos + 2]] ++ [(fst pos - 1, snd pos + 1)] ++ [(fst pos + 1, snd pos + 1)]
+
+
+movimentsPeo :: Posicio -> ColorPeca -> [Posicio]
+-- Si el peo arriba al extrem contrari retornem llista buida per detecar les possibles transformacions a dama
+movimentsPeo pos c | ((snd pos == 8) && (Blanc == c)) || ((snd pos == 1) && (Negre == c)) = []
+-- Si el peo es troba la primera línia pot avançar per matar en horitzontal, avançar una casella, o avançar dues
+movimentsPeo pos c | ((snd pos == 2) && (Blanc == c)) || ((snd pos == 7) && (Negre == c)) =
+    filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + direccio(c), snd pos + (2*direccio(c))]] ++ [(fst pos - direccio(c), snd pos + direccio(c))] ++ [(fst pos + direccio(c), snd pos + direccio(c))])
+-- Si el peo es troba en una de les altres posicions
+movimentsPeo pos c = filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + direccio(c)]] ++ [(fst pos - direccio(c), snd pos + direccio(c))] ++ [(fst pos + direccio(c), snd pos + direccio(c))])
+
+
 
 -- Obtenir moviments de l'alfil
 -- Primer zip: Genera les posicions desde x fins a 8, i desde y fins a 8 (Diagonals dreta superior)
