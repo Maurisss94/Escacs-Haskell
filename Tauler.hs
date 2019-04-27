@@ -8,9 +8,17 @@ import Posicio
 import Data.List
 
 
-type LlistaParell = [(Peca, Posicio)]
+type Parell = (Peca, Posicio)
+type LlistaParell = [Parell]
 
 data Tauler = Tauler LlistaParell
+
+
+                    
+imprimirFila :: Int -> LlistaParell -> [Int] -> String
+imprimirFila n xs (i:is) | length is == 0 = show (iBuscarPeca (i, n) xs)
+imprimirFila n xs (i:is) = imprimirFila n xs is ++ show (iBuscarPeca (i, n) xs)                      
+
 
 instance Show Tauler where
     show (Tauler t) = "   " ++ replicate 10 '=' ++ "\n" ++
@@ -25,12 +33,6 @@ instance Show Tauler where
                       "   " ++ replicate 10 '=' ++ "\n" ++ "    abcdefgh \n" 
 
 
-                    
-imprimirFila :: Int -> LlistaParell -> [Int] -> String
-imprimirFila n xs (i:is) | length is == 0 = show (iBuscarPeca (n, i) xs)
-imprimirFila n xs (i:is) = imprimirFila n xs is ++ show (iBuscarPeca (n, i) xs)                      
-
-
 
 
 
@@ -41,7 +43,7 @@ obtenirLlistaTauler (Tauler t) = t
 -- Param1: Llista d'enters
 -- Param2: Llista d'enters
 generarPosicions :: [Int] -> [Int] -> [Posicio]
-generarPosicions a b = [ (x, y) | x<-a, y<-b ]
+generarPosicions a b = [ (x, y) | y<-a, x<-b ]
 
 -- String que representa l'estat inicial del tauler d'escacs
 taulerInicial :: String
@@ -92,3 +94,25 @@ moviment peca pos =
 --moviment _ _ = error "aaaa!";
 
 
+-- Mètode per esbrinar si y es troba entre x i z (sense incloure x i z)
+valorEntre x y z
+  |x < y = y < z
+  |x > y = y > z
+  |otherwise = False
+
+alguEntre :: Tauler -> Posicio -> Posicio -> LlistaParell
+-- Si les peces es troben a la mateixa vertical... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa vertical de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
+alguEntre (Tauler t) p1 p2 | (fst p1 == fst p2) = (filter (\x -> ((fst (snd x) == fst p1) && ( valorEntre (snd p1) (snd (snd x)) (snd p2))))  t)
+-- Si les peces es troben a la mateixa horitzontal... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa horitzontal de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
+alguEntre (Tauler t) p1 p2 | (snd p1 == snd p2) = (filter (\x -> ((snd (snd x) == snd p1) && ( valorEntre (fst p1) (fst (snd x)) (fst p2))))  t)
+-- Si les peces es troben a la mateixa diagonal... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa diagonal de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
+alguEntre (Tauler t) p1 p2
+    -- Diagonals (++ i --)
+    | ((signum(fst p1 - fst p2) == signum(snd p1 - snd p2)) && (abs(fst p1 - fst p2) == abs(snd p1 - snd p2))) = 
+    filter (\x ->  (((signum(fst p1 - fst (snd x)) == signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
+    ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t
+    -- Diagonals (+- i -+)
+    | ((signum(fst p1 - fst p2) /= signum(snd p1 - snd p2)) && (abs(fst p1 - fst p2) == abs(snd p1 - snd p2))) = 
+        filter (\x ->  (((signum(fst p1 - fst (snd x)) /= signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
+        ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t
+alguEntre _ _ _ = error "No es pot calcular si hi ha alguna peça entre dues posicions si les posicions no estan en la mateixa vertical, en la mateixa horitzontal o en una de les mateixes diagonals."    
