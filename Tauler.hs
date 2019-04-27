@@ -1,6 +1,7 @@
 module Tauler(
     Tauler(..),
-    crearTauler
+    crearTauler,
+    alguEntre
 ) where 
 
 import Peca
@@ -100,19 +101,23 @@ valorEntre x y z
   |x > y = y > z
   |otherwise = False
 
-alguEntre :: Tauler -> Posicio -> Posicio -> LlistaParell
+alguEntre :: Tauler -> Posicio -> Posicio -> Bool
 -- Si les peces es troben a la mateixa vertical... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa vertical de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
-alguEntre (Tauler t) p1 p2 | (fst p1 == fst p2) = (filter (\x -> ((fst (snd x) == fst p1) && ( valorEntre (snd p1) (snd (snd x)) (snd p2))))  t)
+alguEntre (Tauler t) p1 p2 | (fst p1 == fst p2) = (filter (\x -> ((fst (snd x) == fst p1) && ( valorEntre (snd p1) (snd (snd x)) (snd p2))))  t) /= []
 -- Si les peces es troben a la mateixa horitzontal... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa horitzontal de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
-alguEntre (Tauler t) p1 p2 | (snd p1 == snd p2) = (filter (\x -> ((snd (snd x) == snd p1) && ( valorEntre (fst p1) (fst (snd x)) (fst p2))))  t)
+alguEntre (Tauler t) p1 p2 | (snd p1 == snd p2) = (filter (\x -> ((snd (snd x) == snd p1) && ( valorEntre (fst p1) (fst (snd x)) (fst p2))))  t) /= []
 -- Si les peces es troben a la mateixa diagonal... (Fem un filtratge sobre el tauler i ens quedem amb les posicions que estan en la mateixa diagonal de les posicions que ens han passat i que es troben entre els valors y de les posicions que ens ha pasat (sense incloure les p1 i p2!))
 alguEntre (Tauler t) p1 p2
     -- Diagonals (++ i --)
     | ((signum(fst p1 - fst p2) == signum(snd p1 - snd p2)) && (abs(fst p1 - fst p2) == abs(snd p1 - snd p2))) = 
-    filter (\x ->  (((signum(fst p1 - fst (snd x)) == signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
-    ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t
+    (filter (\x ->  (((signum(fst p1 - fst (snd x)) == signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
+    ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t) /= []
     -- Diagonals (+- i -+)
     | ((signum(fst p1 - fst p2) /= signum(snd p1 - snd p2)) && (abs(fst p1 - fst p2) == abs(snd p1 - snd p2))) = 
-        filter (\x ->  (((signum(fst p1 - fst (snd x)) /= signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
-        ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t
-alguEntre _ _ _ = error "No es pot calcular si hi ha alguna peça entre dues posicions si les posicions no estan en la mateixa vertical, en la mateixa horitzontal o en una de les mateixes diagonals."    
+        (filter (\x ->  (((signum(fst p1 - fst (snd x)) /= signum(snd p1 - snd (snd x))) && (abs(fst p1 - fst (snd x)) == abs(snd p1 - snd (snd x)))) &&
+        ((valorEntre (fst p1) (fst (snd x)) (fst p2)) && (valorEntre (snd p1) (snd (snd x)) (snd p2))))) t) /= []
+alguEntre _ _ _ = error "No es pot calcular si hi ha alguna peça entre dues posicions si les posicions no estan en la mateixa vertical, en la mateixa horitzontal o en una de les mateixes diagonals."
+
+
+--obtenirPecesPerColor :: Tauler -> ColorPeca -> LlistaParell
+--obtenirPecesPerColor _ _ = error (\x -> correcte x)
