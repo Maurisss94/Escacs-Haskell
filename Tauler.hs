@@ -59,7 +59,7 @@ taulerInicial = intercalate "\n" ["tcadract",
 -- Param 1: String que representa l'estat inicial d'un tauler d'escacs.
 -- Return: Retorna un tipus Tauler amb les posicions i peces.
 crearTauler :: Tauler
-crearTauler = Tauler (inicialitzarValorsTauler taulerInicial (generarPosicions (reverse [1 .. 8]) [1 .. 8]))
+crearTauler = Tauler (inicialitzarValorsTauler taulerInicial (generarPosicions (reverse [1 .. 8])  [1 .. 8]))
 
 -- Inicialitza els valors del tauler amb peces i posicions
 -- Param 1: String de la disposicio del tauler ex: "ptpppctp\n........\nppp"
