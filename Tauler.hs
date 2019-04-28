@@ -5,7 +5,8 @@ module Tauler(
     alguEntre,
     obtenirPecesPerColor,
     buscarPeca,
-    moviment
+    moviment,
+    obtenirIndexPeca
 ) where 
 
 import Peca
@@ -55,12 +56,12 @@ generarPosicions a b = [ (x, y) | y<-a, x<-b ]
 taulerInicial :: String
 taulerInicial = intercalate "\n" ["tcadract", 
                                   "pppppppp", 
-                                  ".......R",
+                                  "........",
                                   "........",
                                   "........",
                                   "........",
                                   "PPPPPPPP",
-                                  "TCAD.ACT"] ++ "\n"
+                                  "TCADRACT"] ++ "\n"
 
 -- Param 1: String que representa l'estat inicial d'un tauler d'escacs.
 -- Return: Retorna un tipus Tauler amb les posicions i peces.
@@ -128,12 +129,21 @@ obtenirPecesPerColor :: Tauler -> ColorPeca -> LlistaParell
 obtenirPecesPerColor (Tauler t) c = (filter (\x -> (color (fst x)) == c)  t)
 
 
+
+escacIMat :: Tauler -> ColorPeca -> Bool
+escacIMat t c = 
+    let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al tauler
+        movimentsRei = filter (\x -> (buscarPeca x t) == Buida) (moviment (fst posRei) (snd posRei))  -- Dels moviments possibles ens quedem els que van a posicion lliures
+        mat = if (length movimentsRei) > 0 then and (map (\x -> escac t c) movimentsRei) else False
+    in mat    
+
+
 escac :: Tauler -> ColorPeca -> Bool
 escac t c = 
-    let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al taules
+    let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al tauler
         pecesContrari = obtenirPecesPerColor t (contrari c) -- Obtenim les peces del color contrari
-        mata = or (map (\x -> potMatar x posRei t) pecesContrari)
-    in mata
+        escac = or (map (\x -> potMatar x posRei t) pecesContrari)
+    in escac
 
 
 
@@ -148,3 +158,14 @@ potMatar x y t =
             Cavall -> (snd y) `elem` moviments
             _ -> (snd y) `elem` moviments && not (alguEntre t (snd x) (snd y)) -- Torre, Alfil o Dama
     in mata
+
+
+moure :: Tauler -> Parell -> Posicio -> Tauler
+moure (Tauler t) parell pos = Tauler ((fst parell, pos) : (delete parell t))
+
+
+obtenirIndexPeca :: Parell -> LlistaParell -> Int
+obtenirIndexPeca i xs =
+    case i `elemIndex` xs of
+       Just n  -> n
+       Nothing -> -1
