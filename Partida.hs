@@ -24,3 +24,5 @@ jugadaLegal :: Jugada -> Tauler -> Posicio
 jugadaLegal j tauler = (1,2)
 
 -- Implementar metode guanyador, que donat una Partida et retorna, no se com, el torn del guanyador
+
+

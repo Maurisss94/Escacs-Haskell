@@ -1,7 +1,10 @@
 module Tauler(
     Tauler(..),
     crearTauler,
-    alguEntre
+    alguEntre,
+    moviment,
+    LlistaParell,
+    obtenirPecesPerColor
 ) where 
 
 import Peca
@@ -50,12 +53,12 @@ generarPosicions a b = [ (x, y) | y<-a, x<-b ]
 taulerInicial :: String
 taulerInicial = intercalate "\n" ["tcadract", 
                                   "pppppppp", 
-                                  "........",
+                                  ".......R",
                                   "........",
                                   "........",
                                   "........",
                                   "PPPPPPPP",
-                                  "TCADRACT"] ++ "\n"
+                                  "TCAD.ACT"] ++ "\n"
 
 -- Param 1: String que representa l'estat inicial d'un tauler d'escacs.
 -- Return: Retorna un tipus Tauler amb les posicions i peces.
@@ -119,5 +122,27 @@ alguEntre (Tauler t) p1 p2
 alguEntre _ _ _ = error "No es pot calcular si hi ha alguna peça entre dues posicions si les posicions no estan en la mateixa vertical, en la mateixa horitzontal o en una de les mateixes diagonals."
 
 
---obtenirPecesPerColor :: Tauler -> ColorPeca -> LlistaParell
---obtenirPecesPerColor _ _ = error (\x -> correcte x)
+obtenirPecesPerColor :: Tauler -> ColorPeca -> LlistaParell
+obtenirPecesPerColor (Tauler t) c = (filter (\x -> (color (fst x)) == c)  t)
+
+
+escac :: Tauler -> ColorPeca -> [Bool]
+escac t c = 
+    let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al taules
+        pecesContrari = obtenirPecesPerColor t (contrari c) -- Obtenim les peces del color contrari
+        mata = or (map (\x -> potMatar x posRei t) pecesContrari)
+    in mata
+
+
+
+potMatar :: Parell -> Parell -> Tauler -> Bool
+potMatar x y t =
+    -- Obtenim els moviments possibles de la peça atacant (Si es un peo, ens interesen nomes els moviments d'atac!)
+    let moviments = moviment (fst x) (snd x)
+        mata = case tipus $ fst x of
+            -- Si ataca un Peo cal comprovar si la peça a matar es troba en una de les diagonals del peo i si hi ha 'alguEntre' (si esta a primera fila)
+            Peo -> (snd y) `elem` (filter (\m -> (fst (snd x) /= fst m) && (snd (snd x) /= snd m) ) moviments)
+            Rei -> (snd y) `elem` moviments
+            Cavall -> (snd y) `elem` moviments
+            _ -> (snd y) `elem` moviments && not (alguEntre t (snd x) (snd y)) -- Torre, Alfil o Dama
+    in mata

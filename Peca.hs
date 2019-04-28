@@ -9,6 +9,7 @@ module Peca(
     movimentsDama,
     movimentsRei,
     movimentsCavall,
+    contrari,
 ) where
 
 
@@ -22,9 +23,15 @@ data TipusPeca = Peo | Cavall | Alfil | Torre | Dama | Rei deriving (Read)
 data ColorPeca = Blanc | Negre | NoColor deriving (Eq, Show, Read)
 data Peca = Peca { tipus::TipusPeca, color::ColorPeca } | Buida deriving (Eq)
 
-direccio :: ColorPeca -> Int
-direccio Negre = -1
-direccio Blanc = 1
+bandol :: ColorPeca -> Int
+bandol Negre = -1
+bandol Blanc = 1
+
+--Definició de contrari per a ColorPeca
+contrari :: ColorPeca -> ColorPeca
+contrari x 
+    | x == Blanc = Negre
+    | otherwise = Blanc
 
 --Instanciació de la classe de tipus "Show" per al tipus "TipusPeca"
 instance Show TipusPeca where
@@ -97,9 +104,9 @@ movimentsPeo :: Posicio -> ColorPeca -> [Posicio]
 movimentsPeo pos c | ((snd pos == 8) && (Blanc == c)) || ((snd pos == 1) && (Negre == c)) = []
 -- Si el peo es troba la primera línia pot avançar per matar en horitzontal, avançar una casella, o avançar dues
 movimentsPeo pos c | ((snd pos == 2) && (Blanc == c)) || ((snd pos == 7) && (Negre == c)) =
-    filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + direccio(c), snd pos + (2*direccio(c))]] ++ [(fst pos - direccio(c), snd pos + direccio(c))] ++ [(fst pos + direccio(c), snd pos + direccio(c))])
+    filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + bandol(c), snd pos + (2*bandol(c))]] ++ [(fst pos - bandol(c), snd pos + bandol(c))] ++ [(fst pos + bandol(c), snd pos + bandol(c))])
 -- Si el peo es troba en una de les altres posicions
-movimentsPeo pos c = filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + direccio(c)]] ++ [(fst pos - direccio(c), snd pos + direccio(c))] ++ [(fst pos + direccio(c), snd pos + direccio(c))])
+movimentsPeo pos c = filter (\(x,y) -> correcte (x, y)) ([(x,y)|x <- [fst pos], y <- [snd pos + bandol(c)]] ++ [(fst pos - bandol(c), snd pos + bandol(c))] ++ [(fst pos + bandol(c), snd pos + bandol(c))])
 
 
 
@@ -134,3 +141,5 @@ movimentsRei pos = filter (\x -> ((abs (fst pos - fst x) <= 1) && (abs (snd pos 
 -- A partir dels moviments posibles del cavall, es generen totes les possibilitats desde la posició actual, filtrant les posicions que es troben dins del tauler
 movimentsCavall :: Posicio -> [Posicio]
 movimentsCavall pos = filter (\x -> correcte x) [(fst x + fst y, snd x + snd y)|x <- [pos], y <- [(1,2),(2,1),(-1,2),(2,-1),(-2,1),(1,-2),(-1,-2),(-2,-1)]]
+
+
