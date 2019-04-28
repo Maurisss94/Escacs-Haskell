@@ -1,5 +1,6 @@
 import System.IO
 import Control.Monad
+import Data.Char
 import Partida
 import Jugada
 import Peca
@@ -20,9 +21,11 @@ main = do
                 jugadaBlanc = jugadaBlanques llistaJugada
                 jugadaNegre = if (length llistaJugada) > 2 then jugadaNegres llistaJugada else ""
                 j1 = crearJugada jugadaBlanc
-                j2 = crearJugada jugadaNegre
-            print (j1)
-            print (j2))
+                j2 = crearJugada (map toLower jugadaNegre)
+            print (j1)    
+            print (jugadaLegal j1 crearTauler)
+            print (j2)    
+            print (jugadaLegal j2 crearTauler))
     
 
 
