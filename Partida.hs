@@ -2,7 +2,11 @@ module Partida (
     Partida(..),
     Tauler(..),
     crearTauler,
-    jugadaLegal
+    jugadaLegal,
+    fesJugada,
+    tauler,
+    torn,
+    actualitzarPartida
 ) where
 
 import Tauler
@@ -11,13 +15,16 @@ import Peca
 import Posicio
 
 type Torn = Bool
-data Partida = Partida Tauler Torn deriving (Show)
+data Partida = Partida Tauler Torn deriving (Eq, Show)
 
 tauler :: Partida -> Tauler
 tauler (Partida tauler _) = tauler
 
 torn :: Partida -> Torn
 torn (Partida _ torn) = torn
+
+actualitzarPartida :: Tauler -> Torn -> Partida
+actualitzarPartida t bandol = (Partida t bandol)
 
 --fesJugada :: Tauler -> Jugada -> Tauler
 
@@ -40,6 +47,14 @@ jugadaLegal j tauler =
             else esLliure
 
     in esLegal
+
+fesJugada :: Tauler -> Jugada -> Tauler
+fesJugada t jugada = 
+    let esJugadaLegal = (jugadaLegal jugada t)
+        nouTauler = if esJugadaLegal 
+            then (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) 
+            else error ("Jugada erronea")
+    in nouTauler
 
 -- Implementar metode guanyador, que donat una Partida et retorna, no se com, el torn del guanyador
 

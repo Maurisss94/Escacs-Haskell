@@ -1,3 +1,5 @@
+--{-# OPTIONS_GHC -Wall #-}
+
 import System.IO
 import Control.Monad
 import Data.Char
@@ -21,11 +23,11 @@ main = do
                 jugadaBlanc = jugadaBlanques llistaJugada
                 jugadaNegre = if (length llistaJugada) > 2 then jugadaNegres llistaJugada else ""
                 j1 = crearJugada jugadaBlanc
+                nouTauler = fesJugada (tauler partida) j1
                 j2 = crearJugada (map toLower jugadaNegre)
-            print (j1)    
-            print (jugadaLegal j1 crearTauler)
-            print (j2)    
-            print (jugadaLegal j2 crearTauler))
+                tauler2 = (fesJugada nouTauler j2)
+                --return (actualitzarPartida tauler2 (not (torn partida)))
+            print (tauler2))
     
 
 

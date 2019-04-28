@@ -6,7 +6,11 @@ module Tauler(
     obtenirPecesPerColor,
     buscarPeca,
     moviment,
-    obtenirIndexPeca
+    obtenirIndexPeca,
+    moure,
+    escacIMat,
+    escac,
+    potMatar
 ) where 
 
 import Peca
@@ -17,7 +21,7 @@ import Data.List
 type Parell = (Peca, Posicio)
 type LlistaParell = [Parell]
 
-data Tauler = Tauler LlistaParell
+data Tauler = Tauler LlistaParell deriving (Eq)
 
 
                     
