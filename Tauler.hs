@@ -3,7 +3,7 @@ module Tauler(
     LlistaParell,
     crearTauler,
     alguEntre,
-    obtenirPecesPerColor
+    obtenirPecesPerColor,
     buscarPeca,
     moviment
 ) where 
@@ -128,7 +128,7 @@ obtenirPecesPerColor :: Tauler -> ColorPeca -> LlistaParell
 obtenirPecesPerColor (Tauler t) c = (filter (\x -> (color (fst x)) == c)  t)
 
 
-escac :: Tauler -> ColorPeca -> [Bool]
+escac :: Tauler -> ColorPeca -> Bool
 escac t c = 
     let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al taules
         pecesContrari = obtenirPecesPerColor t (contrari c) -- Obtenim les peces del color contrari
