@@ -1,10 +1,11 @@
 module Tauler(
     Tauler(..),
+    LlistaParell,
     crearTauler,
     alguEntre,
-    moviment,
-    LlistaParell,
     obtenirPecesPerColor
+    buscarPeca,
+    moviment
 ) where 
 
 import Peca
@@ -50,6 +51,7 @@ generarPosicions :: [Int] -> [Int] -> [Posicio]
 generarPosicions a b = [ (x, y) | y<-a, x<-b ]
 
 -- String que representa l'estat inicial del tauler d'escacs
+-- Les peces representades en minuscula, son les negres, les majuscules son les blanques.
 taulerInicial :: String
 taulerInicial = intercalate "\n" ["tcadract", 
                                   "pppppppp", 
