@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\graphicspath{ {images/} }
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=25mm,
+ top=25mm,
+ bottom=25mm
+ }
+ 
+ \usepackage[most]{tcolorbox}
+\newtcolorbox{myframe}[1][]{
+  enhanced,
+  arc=0pt,
+  outer arc=0pt,
+  colback=white,
+  boxrule=0.8pt,
+  #1
+}
+ 
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+\vspace*{1in}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=5cm]{logo}
+\end{center}
+\end{figure}
+
+PARADIGMES I LLENGUATGES DE PROGRAMACIÓ
+\vspace*{0.15in}
+\vspace*{0.6in}
+\begin{large}
+\\
+\end{large}
+\vspace*{0.2in}
+\begin{Large}
+\textbf{PRÀCTICA DE HASKELL} \\
+\end{Large}
+\vspace*{0.2in}
+\begin{large}
+Validador de jugades d'escacs\\
+\end{large}
+\vspace*{0.2in}
+\rule{80mm}{0.1mm}\\
+\vspace*{0.2in}
+\begin{large}
+Jose Garvin Victoria \\
+Mauro Balestra Sastriques \\
+\vspace*{0.2in}
+ \textbf{Enginyeria informàtica}\\
+ \vspace*{0.2in}
+ \textbf{Curs 2018/19}
+\end{large}
+\end{center}
+
+\end{titlepage}
+
+
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{Introducció i abast}	
+
+\section{Resolució del problema}
+
+\section{Definicions de tipus}
+\subsection{Funcions a destacar}
+
+\section{Execució i proves}
+\subsection{Com executar}
+\subsection{Jocs de proves}
+
+\section{Observacions}
+
+\newpage
+\section{Bibliografía}
+
+\setitemize{labelindent=-2em,labelsep=1cm,leftmargin=*}
+\begin{itemize}[label={}]
+
+\item LXC, Wikipedia, (2018), Recuperat el 2 d'abril de 2018 de \url{https://en.wikipedia.org/wiki/LXC}
+
+\end{itemize}
+
+\end{document}
