@@ -35,7 +35,7 @@ ferJugadaString liniaJugada p =
 -- Rep una Llista de Partides, i les linies del fitxer a ser impreses.
 mostrarJoc :: [Partida] -> [String] -> IO ()
 mostrarJoc [] [] = return ()
-mostrarJoc [x] [s] = putStrLn ("Tirada " ++ s ++ "\n" ++ show x ++ show (guanyador (tauler x)))
+mostrarJoc [x] [s] = putStrLn ("Tirada " ++ s ++ "\n" ++ show x ++ show (guanyador x))
 mostrarJoc (p:ps) (s:ss) = do
        putStrLn ("Tirada " ++ s)
        putStrLn (show p)

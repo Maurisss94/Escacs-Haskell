@@ -2,11 +2,9 @@ module Partida (
     Partida(..),
     Tauler(..),
     crearTauler,
-    jugadaLegal,
     fesJugada,
     tauler,
     torn,
-    actualitzarPartida,
     guanyador
 ) where
 
@@ -24,12 +22,9 @@ tauler (Partida tauler _) = tauler
 torn :: Partida -> Torn
 torn (Partida _ torn) = torn
 
-actualitzarPartida :: Tauler -> Torn -> Partida
-actualitzarPartida t bandol = (Partida t bandol)
-
 -- Comprova que, la peça i la posicio de la jugada, concordi amb la disposicio del Tauler,
 -- tambe comprova que la posicio desti, estigui dintre els moviments possibles de la peça
--- si tot això es correcte, comprova que la posicio desti estigui Buida
+-- si tot això es correcte, comprova que la posicio desti estigui Buida o bé que la peça que hi sigui sigui del bandol contrari
 -- per ultim, comprova que no hi hagi algu entre la posicio origen i desti.
 -- Si tot aixo es cert, retorna jugadaLegal -> True
 jugadaLegal :: Jugada -> Tauler -> Bool
@@ -51,24 +46,25 @@ jugadaLegal j tauler | j /= Acabada =
 fesJugada :: Tauler -> Jugada -> Tauler
 fesJugada t jugada | jugada /= Acabada = 
     let esJugadaLegal = (jugadaLegal jugada t)
+        taulerAmbJugada = (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada))
         nouTauler = 
-            if(accio jugada) == Escac && not (escac (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) (contrari (color (tipusPeca jugada))))  
+            if(accio jugada) == Escac && not (escac taulerAmbJugada (contrari (color (tipusPeca jugada))))  
             then error ("S'ha indicat un escac inexistent a la jugada " ++ (show jugada))
-            else if (accio jugada) == EscacIMat && not (escacIMat (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) (contrari (color (tipusPeca jugada))))  
+            else if (accio jugada) == EscacIMat && not (escacIMat taulerAmbJugada (contrari (color (tipusPeca jugada))))  
                 then error ("S'ha indicat un escac i mat inexistent a la jugada " ++ (show jugada))
                 else if esJugadaLegal 
-                    then (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) 
+                    then taulerAmbJugada 
                 else error ("Jugada erronea")
     
     in nouTauler
     | otherwise = t
 
--- Implementar metode guanyador, que donat una Partida et retorna, no se com, el torn del guanyador
-guanyador :: Tauler -> Torn
-guanyador t 
-            | (escacIMat t Blanc) = Negre
-            | (escacIMat t Negre) = Blanc
-            | otherwise = NoColor
+-- Implementar metode guanyador, que donat una Partida et retorna, el Torn del guanyador
+guanyador :: Partida -> Torn
+guanyador p
+    | (escacIMat (tauler p) Blanc) = Negre
+    | (escacIMat (tauler p) Negre) = Blanc
+    | otherwise = NoColor
 
 --Instanciació de la classe de tipus "Show" per al tipus "Partida"
 instance Show Partida where
