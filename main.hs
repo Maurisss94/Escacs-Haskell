@@ -1,35 +1,45 @@
---{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall #-}
 
 import System.IO
-import Control.Monad
 import Data.Char
 import Partida
 import Jugada
 import Peca
 import Posicio
 
--- data Torn = Blanques | Negres deriving (Eq)
 
 main = do
     --putStrLn "Indica el nom del fitxer: "
     --nomFitxer <- getLine
-    let partida = (Partida crearTauler True)
     llegirContingutFitxer "./tests/pastor.txt" ReadMode (\handle -> do
         contents <- hGetContents handle
         let jugades = lines contents
-        forM_ jugades $ \jugada -> do
-            print ("Tirada " ++ init jugada)
-            let llistaJugada = words jugada
-                jugadaBlanc = jugadaBlanques llistaJugada
-                jugadaNegre = if (length llistaJugada) > 2 then jugadaNegres llistaJugada else ""
-                j1 = crearJugada jugadaBlanc
-                nouTauler = fesJugada (tauler partida) j1
-                j2 = crearJugada (map toLower jugadaNegre)
-                tauler2 = (fesJugada nouTauler j2)
-                --return (actualitzarPartida tauler2 (not (torn partida)))
-            print (tauler2))
-    
+            partidaInicial = (Partida crearTauler Blanc)
+        print (crearTauler)
+        imprimirJoc (tractarJugades jugades partidaInicial) jugades )
 
+
+tractarJugades :: [String] -> Partida -> [Partida]
+tractarJugades [] _ = []
+tractarJugades (x:xs) p = realitzarAccio x p : tractarJugades xs (realitzarAccio x p)
+ 
+realitzarAccio :: String -> Partida -> Partida
+realitzarAccio l p =
+    let accio = words l
+        jugadaB = jugadaBlanques accio
+        jugadaN = if (length accio) > 2 then jugadaNegres accio else ""
+        jB = crearJugada jugadaB
+        jN = if (length jugadaN) == 0 then Acabada else crearJugada (map toLower jugadaN)
+    in  (Partida (fesJugada (fesJugada (tauler p) jB) jN) (contrari (torn p)) )
+    
+-- Rep una Llista de Partides, i les linies del fitxer a ser impreses.
+imprimirJoc :: [Partida] -> [String] -> IO ()
+imprimirJoc [] [] = return ()
+imprimirJoc [x] [s] = putStrLn ("Tirada " ++ s ++ "\n" ++ show x ++ show (guanyador (tauler x)))
+imprimirJoc (p:ps) (s:ss) = do
+       putStrLn ("Tirada " ++ s)
+       putStrLn (show p)
+       imprimirJoc ps ss
 
 crearJugada :: String -> Jugada
 crearJugada jugada =

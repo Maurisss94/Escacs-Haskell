@@ -67,6 +67,37 @@ taulerInicial = intercalate "\n" ["tcadract",
                                   "PPPPPPPP",
                                   "TCADRACT"] ++ "\n"
 
+-- taulerInicial :: String
+-- taulerInicial = intercalate "\n" ["t.adra.t", 
+--                                   "pppp.Dpp", 
+--                                   "..c..c..",
+--                                   "....p...",
+--                                   "..A.P...",
+--                                   "........",
+--                                   "PPPP.PPP",
+--                                   "TCA.R.CT"] ++ "\n"
+
+-- taulerInicial :: String
+-- taulerInicial = intercalate "\n" ["t.adra.t", 
+--                                   "pppp.ppp", 
+--                                   "..c..c..",
+--                                   "....p..D",
+--                                   "..A.P...",
+--                                   "........",
+--                                   "PPPP.PPP",
+--                                   "TCA.R.CT"] ++ "\n"
+
+-- taulerInicial :: String
+-- taulerInicial = intercalate "\n" ["t.adra.t", 
+--                                   "pppp.Dpp", 
+--                                   "..c..c..",
+--                                   "....p...",
+--                                   "..A.P...",
+--                                   "........",
+--                                   "PPPP.PPP",
+--                                   "TCA.R.CT"] ++ "\n"
+
+
 -- Param 1: String que representa l'estat inicial d'un tauler d'escacs.
 -- Return: Retorna un tipus Tauler amb les posicions i peces.
 crearTauler :: Tauler
