@@ -123,17 +123,14 @@ iBuscarPeca pos (x:xs) = iBuscarPeca pos xs
 
 moviment :: Peca -> Posicio -> [Posicio]
 moviment _ pos | not (correcte pos) = error "La posició especificada no es troba dins del taulell"
-moviment peca pos =
-    if (tipus peca == Torre) then movimentsTorre pos
-    else if (tipus peca == Cavall) then movimentsCavall pos
-    else if (tipus peca == Alfil) then movimentsAlfil pos
-    else if (tipus peca == Dama) then movimentsDama pos
-    else if (tipus peca == Rei) then movimentsRei pos
-    else
-        if ((color peca) == (Negre))
-        then movimentsPeo pos (color peca)
-        else movimentsPeo pos (color peca)
---moviment _ _ = error "aaaa!";
+moviment peca pos
+    | tipus peca == Torre = movimentsTorre pos
+    | tipus peca == Cavall = movimentsCavall pos
+    | tipus peca == Alfil = movimentsAlfil pos
+    | tipus peca == Dama = movimentsDama pos
+    | tipus peca == Rei = movimentsRei pos
+    | tipus peca == Peo = movimentsPeo pos (color peca)
+    | otherwise = error ("Moviments no definits")
 
 
 -- Mètode per esbrinar si y es troba entre x i z (sense incloure x i z)
