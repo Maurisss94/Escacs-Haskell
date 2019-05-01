@@ -1,4 +1,3 @@
--- Mòdul utilitzat per a representar una peca d'escacs.
 module Peca(
     Peca(..),
     TipusPeca(..),

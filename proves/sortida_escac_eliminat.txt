@@ -1,0 +1,70 @@
+Indica el nom del fitxer: 
+tests/escac_eliminat.txt
+   ==========
+8- |tcadract|
+7- |pppppppp|
+6- |........|
+5- |........|
+4- |........|
+3- |........|
+2- |PPPPPPPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 1. Pe2e4 Pe7e5
+   ==========
+8- |tcadract|
+7- |pppp.ppp|
+6- |........|
+5- |....p...|
+4- |....P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 2. Pf2f4 Pe5xf4
+   ==========
+8- |tcadract|
+7- |pppp.ppp|
+6- |........|
+5- |........|
+4- |....Pp..|
+3- |........|
+2- |PPPP..PP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 3. Af1c4 Dd8h4+
+   ==========
+8- |tca.ract|
+7- |pppp.ppp|
+6- |........|
+5- |........|
+4- |..A.Pp.d|
+3- |........|
+2- |PPPP..PP|
+1- |TCADR.CT|
+   ==========
+    abcdefgh 
+
+Tirada 4. Pg2g3 Dh4xg3+
+   ==========
+8- |tca.ract|
+7- |pppp.ppp|
+6- |........|
+5- |........|
+4- |..A.Pp..|
+3- |......d.|
+2- |PPPP...P|
+1- |TCADR.CT|
+   ==========
+    abcdefgh 
+
+Tirada 5. Ph2xg3 Pf4xf3
+main.hs: S'ha especificat una captura inexistent a la jugada amb peça (p) , posicio origen (6,4), posicio destí (6,3) i accio captura.
+CallStack (from HasCallStack):
+  error, called at ./Jugada.hs:126:18 in main:Jugada
