@@ -1,0 +1,67 @@
+Indica el nom del fitxer: 
+tests/pastor.txt
+   ==========
+8- |tcadract|
+7- |pppppppp|
+6- |........|
+5- |........|
+4- |........|
+3- |........|
+2- |PPPPPPPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 1. Pe2e4 Pe7e5
+   ==========
+8- |tcadract|
+7- |pppp.ppp|
+6- |........|
+5- |....p...|
+4- |....P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 2. Af1c4 Cb8c6
+   ==========
+8- |t.adract|
+7- |pppp.ppp|
+6- |..c.....|
+5- |....p...|
+4- |..A.P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCADR.CT|
+   ==========
+    abcdefgh 
+
+Tirada 3. Dd1h5 Cg8f6
+   ==========
+8- |t.adra.t|
+7- |pppp.ppp|
+6- |..c..c..|
+5- |....p..D|
+4- |..A.P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCA.R.CT|
+   ==========
+    abcdefgh 
+
+Tirada 4. Dh5xf7++
+   ==========
+8- |t.adra.t|
+7- |pppp.Dpp|
+6- |..c..c..|
+5- |....p...|
+4- |..A.P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCA.R.CT|
+   ==========
+    abcdefgh 
+
+Fi de partida, blanques guanyen!!!

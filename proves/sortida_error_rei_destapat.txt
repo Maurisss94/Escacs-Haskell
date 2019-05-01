@@ -1,0 +1,70 @@
+Indica el nom del fitxer: 
+tests/error_rei_destapat.txt
+   ==========
+8- |tcadract|
+7- |pppppppp|
+6- |........|
+5- |........|
+4- |........|
+3- |........|
+2- |PPPPPPPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 1. Pe2e4 Pe7e5
+   ==========
+8- |tcadract|
+7- |pppp.ppp|
+6- |........|
+5- |....p...|
+4- |....P...|
+3- |........|
+2- |PPPP.PPP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 2. Pf2f4 Pe5xf4
+   ==========
+8- |tcadract|
+7- |pppp.ppp|
+6- |........|
+5- |........|
+4- |....Pp..|
+3- |........|
+2- |PPPP..PP|
+1- |TCADRACT|
+   ==========
+    abcdefgh 
+
+Tirada 3. Af1c4 Dd8h4+
+   ==========
+8- |tca.ract|
+7- |pppp.ppp|
+6- |........|
+5- |........|
+4- |..A.Pp.d|
+3- |........|
+2- |PPPP..PP|
+1- |TCADR.CT|
+   ==========
+    abcdefgh 
+
+Tirada 4. Pg2g3 Pb7b5
+   ==========
+8- |tca.ract|
+7- |p.pp.ppp|
+6- |........|
+5- |.p......|
+4- |..A.Pp.d|
+3- |......P.|
+2- |PPPP...P|
+1- |TCADR.CT|
+   ==========
+    abcdefgh 
+
+Tirada 5. Pg3g4 Dh4xg4
+main.hs: No s'ha indicat la captura a la jugada amb peça (P) , posicio origen (7,3), posicio destí (7,4) i accio moure.
+CallStack (from HasCallStack):
+  error, called at ./Jugada.hs:124:18 in main:Jugada
