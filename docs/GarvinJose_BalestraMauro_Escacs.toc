@@ -2,11 +2,11 @@
 \contentsline {section}{\numberline {1}Introducci\IeC {\'o} i abast}{2}{section.1}
 \contentsline {subsection}{\numberline {1.1}Introducci\IeC {\'o} i objectiu}{2}{subsection.1.1}
 \contentsline {subsection}{\numberline {1.2}Abast de la pr\IeC {\`a}ctica}{2}{subsection.1.2}
-\contentsline {section}{\numberline {2}Resoluci\IeC {\'o} del problema}{3}{section.2}
-\contentsline {section}{\numberline {3}Definicions de tipus}{3}{section.3}
-\contentsline {subsection}{\numberline {3.1}Funcions a destacar}{3}{subsection.3.1}
-\contentsline {section}{\numberline {4}Execuci\IeC {\'o} i proves}{3}{section.4}
-\contentsline {subsection}{\numberline {4.1}Com executar}{3}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Jocs de proves}{3}{subsection.4.2}
-\contentsline {section}{\numberline {5}Observacions}{3}{section.5}
-\contentsline {section}{\numberline {6}Bibliograf\IeC {\'\i }a}{4}{section.6}
+\contentsline {section}{\numberline {2}Resoluci\IeC {\'o} del problema}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Definicions de tipus}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Funcions a destacar}{4}{subsection.2.2}
+\contentsline {section}{\numberline {3}Execuci\IeC {\'o} i proves}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}Com executar}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Jocs de proves}{6}{subsection.3.2}
+\contentsline {section}{\numberline {4}Observacions}{9}{section.4}
+\contentsline {section}{\numberline {5}Bibliograf\IeC {\'\i }a}{10}{section.5}
