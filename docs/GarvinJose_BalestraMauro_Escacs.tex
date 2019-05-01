@@ -1,0 +1,136 @@
+\documentclass[12pt]{article}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[utf8x]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\graphicspath{ {images/} }
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=25mm,
+ top=25mm,
+ bottom=25mm
+ }
+ 
+ \usepackage[most]{tcolorbox}
+\newtcolorbox{myframe}[1][]{
+  enhanced,
+  arc=0pt,
+  outer arc=0pt,
+  colback=white,
+  boxrule=0.8pt,
+  #1
+}
+ 
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+\vspace*{1in}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=5cm]{logo}
+\end{center}
+\end{figure}
+
+PARADIGMES I LLENGUATGES DE PROGRAMACIÓ
+\vspace*{0.15in}
+\vspace*{0.6in}
+\begin{large}
+\\
+\end{large}
+\vspace*{0.2in}
+\begin{Large}
+\textbf{PRÀCTICA DE HASKELL} \\
+\end{Large}
+\vspace*{0.2in}
+\begin{large}
+Validador de jugades d'escacs\\
+\end{large}
+\vspace*{0.2in}
+\rule{80mm}{0.1mm}\\
+\vspace*{0.2in}
+\begin{large}
+Jose Garvin Victoria \\
+Mauro Balestra Sastriques \\
+\vspace*{0.2in}
+ \textbf{Enginyeria informàtica}\\
+ \vspace*{0.2in}
+ \textbf{Curs 2018/19}
+\end{large}
+\end{center}
+
+\end{titlepage}
+
+
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{Introducció i abast}
+
+\subsection{Introducció i objectiu}
+L'objectiu d'aquesta pràctica és l'implementació d'un validador de jugades d'escacs en el llenguatge de programació \textbf{Haskell}. \\
+El funcionament principal d'aquest programa és divideix en els següents blocs:
+\begin{itemize}
+\item Interacció amb l'usuari per demanar el fitxer de text amb les jugades de la partida d'escacs. 
+\item Lectura del fitxer de text, on assumim que el format és correcte i que la notació emprada és la \href{https://ca.wikipedia.org/wiki/Notaci%C3%B3_algebraica}{\textbf{algebraica estesa}}.
+\item Per cada jugada llegida del fitxer, es generen unes jugades on es validarán la seva correctesa, amb indicació de captures, escacs i escac i mat.
+\item Per pantalla es mostraràn els estats de la partida en curs, fins arribar al final, on trobarem un missatge indicant el guanyador, si n'hi ha, empat, o bé un missatge d'error indicant quina ha estat la jugada invàlida.
+\end{itemize}
+
+\subsection{Abast de la pràctica}
+
+Per problemes de sintaxi i comprensió del paradigma de programació, fins a avançat estat de la pràctica, l'abast de la pràctica ha estat fins a la nota de 8:
+\\
+\\
+\noindent
+\textit{Compliments i notes: \\
+- Fins a un 8. Validació de notació correcta (amb indicació de captures, escacs i escac i mat), de moviments correctes (sense controlar captura al pas, coronació i enrocs), detecció d’escac i mat, representació textual i interacció amb l’usuari correcte}
+\\
+
+\noindent
+Cal dir que encara que el grup no ha pogut assolir l'objectiu de l'abast de puntuació de 10, s'ha pogut acurar el disseny del programa, emprant mòduls (no programar tot en un sol fitxer), llistes per comprhensió, i funcions d'ordre superior a la majoria de mètode \textbf{importants} del programa. 
+
+Gairebé no s'han hagut d'importar mòduls externs de la distribució GHC, ja que creiem que era millor aprendre a implementar aquestes funcions que ens oferia aquesta distribució pel nostre compte, per tal d'adquirir els coneixements adequats d'aquest paradigma.
+
+
+\section{Resolució del problema}
+
+\section{Definicions de tipus}
+\subsection{Funcions a destacar}
+
+\section{Execució i proves}
+\subsection{Com executar}
+\subsection{Jocs de proves}
+
+\section{Observacions}
+
+\newpage
+\section{Bibliografía}
+
+\setitemize{labelindent=-2em,labelsep=1cm,leftmargin=*}
+\begin{itemize}[label={}]
+
+\item LXC, Wikipedia, (2018), Recuperat el 2 d'abril de 2018 de \url{https://en.wikipedia.org/wiki/LXC}
+
+\end{itemize}
+
+\end{document}

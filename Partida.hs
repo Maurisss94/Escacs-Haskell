@@ -3,7 +3,6 @@ module Partida (
     Partida(..),
     Tauler(..),
     crearTauler,
-    jugadaLegal,
     fesJugada,
     torn,
     tauler,
@@ -82,23 +81,24 @@ jugadaLegal j tauler | j /= Acabada =
 fesJugada :: Tauler -> Jugada -> Tauler
 fesJugada t jugada | jugada /= Acabada = 
     let esJugadaLegal = (jugadaLegal jugada t)
+        taulerAmbJugada = (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada))
         nouTauler = 
-            if(accio jugada) == Escac && not (escac (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) (contrari (color (tipusPeca jugada))))  
+            if(accio jugada) == Escac && not (escac taulerAmbJugada (contrari (color (tipusPeca jugada))))  
             then error ("S'ha indicat un escac inexistent a la jugada " ++ (show jugada))
-            else if (accio jugada) == EscacIMat && not (escacIMat (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) (contrari (color (tipusPeca jugada))))  
+            else if (accio jugada) == EscacIMat && not (escacIMat taulerAmbJugada (contrari (color (tipusPeca jugada))))  
                 then error ("S'ha indicat un escac i mat inexistent a la jugada " ++ (show jugada))
                 else if esJugadaLegal 
-                    then (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada)) 
+                    then taulerAmbJugada 
                 else error ("Jugada erronea")
     
     in nouTauler
     | otherwise = t
 
--- Funció que donat un Tauler ens retorna el color del guanyador si n'hi ha, si hi ha guanyador retorna 'NoColor'.
--- * Paràmetre 1: Tauler a comprovar si hi ha guanyador.
+-- Funció que donat un Partida ens retorna el color del guanyador si n'hi ha, si hi ha guanyador retorna 'NoColor'.
+-- * Paràmetre 1: Partida a comprovar si hi ha guanyador.
 -- ** Retorn: Color del guanyador. Si no hi ha guanyador retorna 'NoColor'.
-guanyador :: Tauler -> Torn
-guanyador t 
-            | (escacIMat t Blanc) = Negre
-            | (escacIMat t Negre) = Blanc
-            | otherwise = NoColor
+guanyador :: Partida -> Torn
+guanyador p
+    | (escacIMat (tauler p) Blanc) = Negre
+    | (escacIMat (tauler p) Negre) = Blanc
+    | otherwise = NoColor
