@@ -67,36 +67,6 @@ taulerInicial = intercalate "\n" ["tcadract",
                                   "PPPPPPPP",
                                   "TCADRACT"] ++ "\n"
 
--- taulerInicial :: String
--- taulerInicial = intercalate "\n" ["t.adra.t", 
---                                   "pppp.Dpp", 
---                                   "..c..c..",
---                                   "....p...",
---                                   "..A.P...",
---                                   "........",
---                                   "PPPP.PPP",
---                                   "TCA.R.CT"] ++ "\n"
-
--- taulerInicial :: String
--- taulerInicial = intercalate "\n" ["t.adra.t", 
---                                   "pppp.ppp", 
---                                   "..c..c..",
---                                   "....p..D",
---                                   "..A.P...",
---                                   "........",
---                                   "PPPP.PPP",
---                                   "TCA.R.CT"] ++ "\n"
-
--- taulerInicial :: String
--- taulerInicial = intercalate "\n" ["t.adra.t", 
---                                   "pppp.Dpp", 
---                                   "..c..c..",
---                                   "....p...",
---                                   "..A.P...",
---                                   "........",
---                                   "PPPP.PPP",
---                                   "TCA.R.CT"] ++ "\n"
-
 
 -- Param 1: String que representa l'estat inicial d'un tauler d'escacs.
 -- Return: Retorna un tipus Tauler amb les posicions i peces.
@@ -166,7 +136,7 @@ escacIMat :: Tauler -> ColorPeca -> Bool
 escacIMat t c = 
     let posRei = (filter (\x -> (tipus (fst x)) == Rei) (obtenirPecesPerColor t c)) !! 0 -- Cerquem el rei del color donat al tauler
         movimentsRei = filter (\x -> (buscarPeca x t) == Buida) (moviment (fst posRei) (snd posRei))  -- Dels moviments possibles ens quedem els que van a posicion lliures
-        mat = if (length movimentsRei) > 0 then and (map (\x -> escac t c) movimentsRei) else False
+        mat = if (length movimentsRei) > 0 then and (map (\x -> escac (moure t ((Peca Rei c), snd posRei) x) c) movimentsRei) else False
     in mat    
 
 
@@ -183,12 +153,18 @@ potMatar :: Parell -> Parell -> Tauler -> Bool
 potMatar x y t =
     -- Obtenim els moviments possibles de la peça atacant (Si es un peo, ens interesen nomes els moviments d'atac!)
     let moviments = moviment (fst x) (snd x)
+        pecaRival = (fst y)
+        hiHaPeca = pecaRival /= Buida
+        esRival = if hiHaPeca 
+            then (color (fst x) /= (color pecaRival))
+            else False
+
         mata = case tipus $ fst x of
             -- Si ataca un Peo cal comprovar si la peça a matar es troba en una de les diagonals del peo i si hi ha 'alguEntre' (si esta a primera fila)
-            Peo -> (snd y) `elem` (filter (\m -> (fst (snd x) /= fst m) && (snd (snd x) /= snd m) ) moviments)
-            Rei -> (snd y) `elem` moviments
-            Cavall -> (snd y) `elem` moviments
-            _ -> (snd y) `elem` moviments && not (alguEntre t (snd x) (snd y)) -- Torre, Alfil o Dama
+            Peo -> (snd y) `elem` (filter (\m -> (fst (snd x) /= fst m) && (snd (snd x) /= snd m) ) moviments) && esRival
+            Rei -> (snd y) `elem` moviments && esRival
+            Cavall -> (snd y) `elem` moviments && esRival
+            _ -> (snd y) `elem` moviments && not (alguEntre t (snd x) (snd y)) && esRival -- Torre, Alfil o Dama
     in mata
 
 

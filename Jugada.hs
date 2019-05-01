@@ -2,7 +2,9 @@
 module Jugada(
     Accio(..),
     Jugada(..),
-    llegirJugada
+    llegirJugada,
+    fesJugada,
+    obligatMatar
 ) where
 
 
@@ -13,13 +15,29 @@ import Peca
 -- Importació del mòdul 'Posició'.
 import Posicio
 
-data Accio = Matar | Escac | EscacIMat | Res deriving (Eq, Show)
+-- Importació del mòdul 'Tauler'.
+import Tauler
+
+
+
+-- Instanciació de la classe de tipus 'Show' per al tipus 'TipusPeca'.
+instance Show Jugada where
+    show (Jugada p origen desti accio) = "amb peça (" ++ (show p) ++ ") " ++ ", posicio origen " ++ (show origen) ++ ", posicio destí " ++ (show desti) ++ " i accio " ++ (show accio) ++ "."
+    show Acabada = " " ++  "."
+
+instance Show Accio where
+    show Matar = "captura"  
+    show Escac = "escac"
+    show EscacIMat = "escac i mat"
+    show Res = "moure"
+
+data Accio = Matar | Escac | EscacIMat | Res deriving (Eq)
 data Jugada = Jugada {
     tipusPeca :: Peca,
     origen :: Posicio,
     desti :: Posicio,
     accio :: Accio
-    } | Acabada deriving (Eq, Show)
+    } | Acabada deriving (Eq)
 
 
 llegirJugada :: String -> Jugada
@@ -39,6 +57,92 @@ llegirJugada jugada
         jugadaEscaciMat = (Jugada peca posOrigen posDesti EscacIMat)
         jugadaNormal = (Jugada peca posOrigen posDesti Res)
 
+
+-- Funció que certifica que la Jugada proposada és legal a partir. 
+-- * Paràmetre 1: Jugada 
+-- * Paràmetre 2: Tauler 
+-- ** Retorn: Llista de posicions (moviments) possibles per a la peça tenint en compte la posició on es troba.
+jugadaLegal :: Jugada -> Tauler -> Bool
+jugadaLegal j tauler | j /= Acabada = 
+    let pecaMoviment = tipusPeca j
+        moviments = if pecaMoviment == (buscarPeca (origen j) tauler) 
+            then moviment pecaMoviment (origen j) else []
+
+        -- El moviment esta en la llista de possibles moviments
+        movimentValid = ((desti j) `elem` moviments)
+
+        -- La posició destí es buida
+        posicioBuida = ((buscarPeca (desti j) tauler) == Buida)
+
+        -- A la posició destí hi ha una peça de l'adversari
+        destiColorContrari = (not posicioBuida) && ((color (buscarPeca (desti j) tauler)) /= (color pecaMoviment))
+
+        -- Desplaçament diagonal
+        desplDiagonal = ((desti j) `elem` (filter (\m -> (fst (origen j) /= fst m) && (snd (origen j) /= snd m)) moviments))
+
+        -- Variable per comprovar si un peo pot matar en diagonal
+        peoPotMatarDiagonal = desplDiagonal 
+        --Hi ha algun entre (desplaçaments llargs)
+        algunaPecaEntre = (alguEntre tauler (origen j) (desti j))
+
+        esLegal =
+            -- En cas de rei o cavall, comprovem si el moviments es valid i la posicio no es buida o hi ha un rival
+            if (tipus pecaMoviment == Cavall || tipus pecaMoviment == Rei) 
+            then (movimentValid && (posicioBuida || destiColorContrari))
+
+            else if (tipus pecaMoviment == Peo && movimentValid) then
+                
+                if (peoPotMatarDiagonal) then ((buscarPeca (desti j) tauler) /= Buida)
+                
+                else if ((snd (origen j) /= 2) || (snd (desti j) /= 7)) then posicioBuida
+                
+                -- Peo a primera fila
+                else if ((snd (origen j) == 2) || (snd (desti j) == 7)) then ((not algunaPecaEntre) && posicioBuida)
+
+                else False
+
+            else
+                -- Dama, alfil i torre
+                movimentValid && ((not algunaPecaEntre) || destiColorContrari)
+
+    in esLegal
+    | otherwise = False
+
+    -- && ((snd (origen j) == 2) || (snd (desti j) == 7)))
+    
+
+-- Funció que donat un Tauler i una Jugada ens torna un nou Tauler amb la jugada feta.
+-- * Paràmetre 1: Tauler inicial
+-- * Paràmetre 2: Tauler amb la jugada aplicada
+-- ** Retorn: Tauler amb la jugada feta
+fesJugada :: Tauler -> Jugada -> Tauler
+fesJugada t jugada | jugada /= Acabada = 
+    let esJugadaLegal = (jugadaLegal jugada t)
+        taulerAmbJugada = (moure t ((tipusPeca jugada), (origen jugada)) (desti jugada))
+        nouTauler = 
+            if obligatMatar t jugada && (accio jugada) == Res
+            then error ("No s'ha indicat la captura a la jugada " ++ (show jugada))
+            else if (accio jugada) == Matar && ((buscarPeca (desti jugada) t) == Buida)
+            then error ("S'ha especificat una captura inexistent a la jugada " ++ (show jugada))
+            else if (accio jugada) == Escac && not (escac taulerAmbJugada (contrari (color (tipusPeca jugada))))  
+            then error ("S'ha indicat un escac inexistent a la jugada " ++ (show jugada))
+            else if (accio jugada) == EscacIMat && not (escacIMat taulerAmbJugada (contrari (color (tipusPeca jugada))))  
+                then error ("S'ha indicat un escac i mat inexistent a la jugada " ++ (show jugada))
+                else if esJugadaLegal 
+                    then taulerAmbJugada 
+                else error ("La jugada " ++ (show jugada) ++ " Es errònia.")
+    
+    in nouTauler
+    | otherwise = t
+
+
+obligatMatar :: Tauler -> Jugada -> Bool
+obligatMatar t jug = 
+    let pecaOri = (tipusPeca jug)
+        des = (desti jug)
+        pecaDes = buscarPeca des t
+        ori = (origen jug)
+     in or (map (\x -> (potMatar (pecaOri, ori) (buscarPeca x t, x) t) && (buscarPeca x t /= Buida)) (moviment pecaOri ori))
 
 
 -- Funcions auxiliars que tracten el string de jugada --

@@ -9,9 +9,9 @@ import Posicio
 
 
 main = do
-    --putStrLn "Indica el nom del fitxer: "
-    --nomFitxer <- getLine
-    llegirContingutFitxer "./tests/pastor.txt" ReadMode (\handle -> do
+    putStrLn "Indica el nom del fitxer: "
+    nomFitxer <- getLine
+    llegirContingutFitxer nomFitxer ReadMode (\handle -> do
         contents <- hGetContents handle
         let jugades = lines contents
             partidaInicial = (Partida crearTauler Blanc)
@@ -35,7 +35,7 @@ ferJugadaString liniaJugada p =
 -- Rep una Llista de Partides, i les linies del fitxer a ser impreses.
 mostrarJoc :: [Partida] -> [String] -> IO ()
 mostrarJoc [] [] = return ()
-mostrarJoc [x] [s] = putStrLn ("Tirada " ++ s ++ "\n" ++ show x ++ show (guanyador x))
+mostrarJoc [x] [s] = putStrLn ("Tirada " ++ s ++ "\n" ++ show x ++ "\n" ++ "Fi de partida, " ++ guanyador x)
 mostrarJoc (p:ps) (s:ss) = do
        putStrLn ("Tirada " ++ s)
        putStrLn (show p)
