@@ -1,4 +1,3 @@
--- Mòdul utilitzat per a representar una jugada en el joc d'escacs.
 module Jugada(
     Accio(..),
     Jugada(..),
@@ -9,13 +8,9 @@ module Jugada(
 
 
 
--- Importació del mòdul 'Peca'.
+-- Importació del mòduls propis.
 import Peca
-
--- Importació del mòdul 'Posició'.
 import Posicio
-
--- Importació del mòdul 'Tauler'.
 import Tauler
 
 
@@ -40,6 +35,10 @@ data Jugada = Jugada {
     } | Acabada deriving (Eq)
 
 
+    
+-- Funció per llegir una jugada. A partir d'una cadena ens retorna la jugada corresponent.
+-- * Paràmetre 1: String d'on extreure la jugada
+-- ** Retorn: Una jugada de tipus 'Jugada'.
 llegirJugada :: String -> Jugada
 llegirJugada jugada 
     | potMatarString jugada = jugadaMatar
@@ -67,49 +66,25 @@ jugadaLegal j tauler | j /= Acabada =
     let pecaMoviment = tipusPeca j
         moviments = if pecaMoviment == (buscarPeca (origen j) tauler) 
             then moviment pecaMoviment (origen j) else []
-
-        -- El moviment esta en la llista de possibles moviments
-        movimentValid = ((desti j) `elem` moviments)
-
-        -- La posició destí es buida
-        posicioBuida = ((buscarPeca (desti j) tauler) == Buida)
-
-        -- A la posició destí hi ha una peça de l'adversari
-        destiColorContrari = (not posicioBuida) && ((color (buscarPeca (desti j) tauler)) /= (color pecaMoviment))
-
-        -- Desplaçament diagonal
-        desplDiagonal = ((desti j) `elem` (filter (\m -> (fst (origen j) /= fst m) && (snd (origen j) /= snd m)) moviments))
-
-        -- Variable per comprovar si un peo pot matar en diagonal
-        peoPotMatarDiagonal = desplDiagonal 
-        --Hi ha algun entre (desplaçaments llargs)
-        algunaPecaEntre = (alguEntre tauler (origen j) (desti j))
-
+        movimentValid = ((desti j) `elem` moviments) -- El moviment esta en la llista de possibles moviments
+        posicioBuida = ((buscarPeca (desti j) tauler) == Buida) -- La posició destí es buida
+        destiColorContrari = (not posicioBuida) && ((color (buscarPeca (desti j) tauler)) /= (color pecaMoviment))  -- A la posició destí hi ha una peça de l'adversari
+        desplDiagonal = ((desti j) `elem` (filter (\m -> (fst (origen j) /= fst m) && (snd (origen j) /= snd m)) moviments)) -- Desplaçament diagonal
+        peoPotMatarDiagonal = desplDiagonal -- Variable per comprovar si un peo pot matar en diagonal
+        algunaPecaEntre = (alguEntre tauler (origen j) (desti j)) -- Hi ha algun entre (desplaçaments llargs)
         esLegal =
-            -- En cas de rei o cavall, comprovem si el moviments es valid i la posicio no es buida o hi ha un rival
             if (tipus pecaMoviment == Cavall || tipus pecaMoviment == Rei) 
             then (movimentValid && (posicioBuida || destiColorContrari))
-
             else if (tipus pecaMoviment == Peo && movimentValid) then
-                
                 if (peoPotMatarDiagonal) then ((buscarPeca (desti j) tauler) /= Buida)
-                
                 else if ((snd (origen j) /= 2) || (snd (desti j) /= 7)) then posicioBuida
-                
-                -- Peo a primera fila
                 else if ((snd (origen j) == 2) || (snd (desti j) == 7)) then ((not algunaPecaEntre) && posicioBuida)
-
                 else False
-
             else
-                -- Dama, alfil i torre
-                movimentValid && ((not algunaPecaEntre) || destiColorContrari)
-
+                movimentValid && ((not algunaPecaEntre) || destiColorContrari) -- Dama, alfil i torre
     in esLegal
     | otherwise = False
-
-    -- && ((snd (origen j) == 2) || (snd (desti j) == 7)))
-    
+ 
 
 -- Funció que donat un Tauler i una Jugada ens torna un nou Tauler amb la jugada feta.
 -- * Paràmetre 1: Tauler inicial
@@ -135,7 +110,10 @@ fesJugada t jugada | jugada /= Acabada =
     in nouTauler
     | otherwise = t
 
-
+-- Funció que determina si en una jugada caldria matar o no
+-- * Paràmetre 1: Tauler actual.
+-- * Paràmetre 2: Jugada actual.
+-- ** Retorn: 'True' si en la jugada cal matar, altrament retorna 'False'.
 obligatMatar :: Tauler -> Jugada -> Bool
 obligatMatar t jug = 
     let pecaOri = (tipusPeca jug)
@@ -144,19 +122,32 @@ obligatMatar t jug =
         ori = (origen jug)
      in or (map (\x -> (potMatar (pecaOri, ori) (buscarPeca x t, x) t) && (buscarPeca x t /= Buida)) (moviment pecaOri ori))
 
-
--- Funcions auxiliars que tracten el string de jugada --
+-- Funció que ens serveix per determinar si en una cadena llegida des del fitxer s'especifica una captura o no.
+-- * Paràmetre 1: String a comprovar (p.e 'Pe5xf4') 
+-- ** Retorn: 'True' si la cadena conté una 'x' a la posició 3, altrament retorna 'False'.
 potMatarString :: String -> Bool
 potMatarString x = (x !! 3) == 'x'
-        
+       
+-- Funció que ens serveix per determinar si en una cadena llegida des del fitxer s'especifica una escac o no.
+-- * Paràmetre 1: String a comprovar (p.e 'Dh4xg3+') 
+-- ** Retorn: 'True' si la cadena conté una '+' al final de la cadena, altrament retorna 'False'.
 potEscacString :: String -> Bool
 potEscacString x = ( not (potEscacIMatString x) && (x !! (length x -1) == '+')) || ( not (potEscacIMatString x) && (potMatarString x) && (x !! (length x -1) == '+'))
 
+-- Funció que ens serveix per determinar si en una cadena llegida des del fitxer s'especifica una escac o no.
+-- * Paràmetre 1: String a comprovar (p.e 'Dh4xg3+') 
+-- ** Retorn: 'True' si la cadena conté una '+' al final de la cadena, altrament retorna 'False'.
 potEscacIMatString :: String -> Bool
 potEscacIMatString x = ((x !! (length x -1) == '+') && (x !! (length x -2) == '+')) || ((potMatarString x) && (x !! (length x -1) == '+') && (x !! (length x -2) == '+'))
-        
+
+-- Funció que ens serveix per extreure una peça de una cadena llegida des del fitxer
+-- * Paràmetre 1: String a comprovar (p.e 'Dh4g3') 
+-- ** Retorn: Una peça de tipus 'Peca' corresponent a la peça llegida.
 obtenirPecaString :: String -> Peca
 obtenirPecaString jugada = llegirPeca (jugada !! 0)
 
+-- Funció que ens serveix per extreure una peça de una cadena llegida des del fitxer
+-- * Paràmetre 1: String a comprovar (p.e 'Dh4g3') 
+-- ** Retorn: Una peça de tipus 'Peca' corresponent a la peça llegida.
 obtenirPosicioString :: String -> Int -> Int
 obtenirPosicioString jugada x  = caracterAEnter (jugada !! x)

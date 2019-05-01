@@ -1,4 +1,3 @@
--- Mòdul utilitzat per a representar les posicions del tauler d'escacs.
 module Posicio (
     Posicio(..),
     correcte,

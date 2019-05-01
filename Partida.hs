@@ -1,4 +1,3 @@
--- Mòdul utilitzat per a representar una partida en el joc d'escacs. La
 module Partida (
     Partida(..),
     Tauler(..),
@@ -9,6 +8,7 @@ module Partida (
 ) where
 
 
+
 -- Importació de llibreries adicionals.
 import Tauler
 import Jugada
@@ -16,7 +16,8 @@ import Peca
 import Posicio
 
 
--- Definició del tipus 'Torn'.
+
+-- Definició del tipus propis.
 type Torn = ColorPeca
 
 
